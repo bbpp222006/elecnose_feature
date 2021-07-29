@@ -8,10 +8,6 @@ import matplotlib.pyplot as plt
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 matplotlib.use('Qt5Agg')
-# from pylab import *
-# mpl.rcParams['font.sans-serif'] = ['SimHei']
-# mpl.rcParams['axes.unicode_minus'] = False
-# 使用 matplotlib中的FigureCanvas (在使用 Qt5 Backends中 FigureCanvas继承自QtWidgets.QWidget)
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import Qt,QTimer
