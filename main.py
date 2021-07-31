@@ -369,9 +369,9 @@ class MyMatplotlibFigure(FigureCanvas):
             pca.fit(get_fetured_data(all_data_temp))
             for i, (name, data_list) in enumerate(scalar_data.items()):
                 new_sig = pca.transform(get_fetured_data(data_list))
-                self.axes.scatter(new_sig[:, 0], new_sig[:, 1], color=self.colors[i], alpha=0.5, label=name)
-            self.axes.legend()
-            self.axes.set_title(feature_list)
+                self.axes.scatter(new_sig[:, 0], new_sig[:, 1], color=self.colors[i], alpha=0.9, label=name,s=50)
+
+
 
         if decomp_method=="lda":
             lda=LinearDiscriminantAnalysis()
@@ -379,15 +379,15 @@ class MyMatplotlibFigure(FigureCanvas):
             for i, (name, data_list) in enumerate(scalar_data.items()):
                 new_sig = lda.transform(get_fetured_data(data_list))
                 if new_sig.shape[1] != 1:
-                    self.axes.scatter(new_sig[:, 0], new_sig[:, 1], color=self.colors[i], alpha=0.5, label=name)
+                    self.axes.scatter(new_sig[:, 0], new_sig[:, 1], color=self.colors[i], alpha=0.9, label=name)
                 else:  # 二分类时没办法……
-                    self.axes.scatter(new_sig[:, 0], np.random.random([new_sig.shape[0], 1]), color=self.colors[i], alpha=0.5,
+                    self.axes.scatter(new_sig[:, 0], np.random.random([new_sig.shape[0], 1]), color=self.colors[i], alpha=0.9,
                                label=name)
 
 
-                # self.axes.scatter(new_sig[:, 0], new_sig[:, 1], color=self.colors[i], alpha=0.5, label=name)
-            self.axes.legend()
-            self.axes.set_title(feature_list)
+        self.axes.legend()
+
+        self.axes.set_title("、".join(feature_list))
         # self.axes.plot(np.random.randint(0, 10, [5, 1]), 'o--')
         # self.axes.spines['top'].set_visible(False)  # 顶边界不可见
         # self.axes.spines['right'].set_visible(False)  # 右边界不可见
