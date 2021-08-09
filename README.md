@@ -1,4 +1,6 @@
 ## 软件说明
+码云仓库：https://gitee.com/glider123/elecnose_feature
+
 ![](.README_images/97217005.png)
 程序可选pca和lda两种降维方式显示
 
@@ -28,3 +30,4 @@ python3
 ## 更新计划
 - [ ] 通道个数选择功能
 - [ ] 加载中gif显示
+- [ ] 信号处理可视化

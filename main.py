@@ -32,7 +32,7 @@ class App(QWidget):
         self.initUI()
 
     def initUI(self):
-        self.setWindowTitle('动态演示')
+        self.setWindowTitle('降维绘图')
         # self.setFixedSize(1200, 700)
         # self.setMinimumSize(1200, 700)
         # self.setMaximumSize(1200, 700)
@@ -249,7 +249,7 @@ class App(QWidget):
     #     # 设置计时间隔并启动
     #     self.timer.start(2000)  # 每隔一秒执行一次绘图函数 showTime
     #     self.startBtn.setEnabled(False)  # 开始按钮变为禁用
-    #     self.endBtn.setEnabled(True)  # 结束按钮变为可用
+    #     self.endBtn.setEnabled(True)  # 结束按钮变为可用F
     #
     # def endTimer(self):
     #     self.timer.stop()  # 计时停止
@@ -274,21 +274,36 @@ class MyMatplotlibFigure(FigureCanvas):
         self.colors = plt.rcParams["axes.prop_cycle"].by_key()["color"]
         plt.rcParams['font.sans-serif'] = ['SimHei']  # 用来正常显示中文标签
         plt.rcParams['axes.unicode_minus'] = False  # 用来正常显示负号
+        self.signal_num = 0
 
     def load_data(self,class_dir_dict):
         self.data_dict = {}
-        def read_file_data(file_path, num_sig=5):
+
+        def read_file_data(file_path):  # 至少20个以上的采样点！
             data = np.genfromtxt(file_path, delimiter='\t')
-            nan_flag = data.sum()
-            if np.isnan(nan_flag):
-                print('已删除nan', end=",")
-                data = data[:, :-1]
-            if data.shape[1] > num_sig:
-                print('已删除时间序列', end=",")
-                data = data[:, -num_sig:]
+            # 删除nan序列
+            data = np.delete(data, np.argwhere(np.isnan(data[1, :])), axis=1)
+            data = np.concatenate((data, np.arange(data.shape[0]).reshape([-1, 1])), axis=1)
+            # 删除时间序列
+            # if num_sig and data.shape[1] > num_sig:
+            #     print('已删除时间序列', end=",")
+            #     data = data[:, -num_sig:]
+            # else:
+            count_list = np.zeros(data.shape[1])
+            sig_len = data.shape[0]
+            for i in range(10):  # 取10次，找出时间序列
+                rand_indexs = np.sort(np.random.randint(0, sig_len, 3))
+                temp_a = np.abs((rand_indexs[1] - rand_indexs[2]) * data[rand_indexs[0], :] - (
+                            rand_indexs[0] - rand_indexs[2]) * data[rand_indexs[1], :] + (
+                                            rand_indexs[0] - rand_indexs[1]) * data[rand_indexs[2], :])
+                zero_index = np.argwhere(temp_a < 1e-5)
+                count_list[zero_index] += 1
+            timearray_index = np.argwhere(count_list >= 9)
+            data = np.delete(data, timearray_index, axis=1)
+            print('自动检测出时间序列，已删除', end=",")
             nan_flag = data.sum()
             assert np.isnan(nan_flag) == False
-            assert data.shape[1] == num_sig
+            # assert data.shape[1] == num_sig
             return data
 
         for class_name,class_dir in class_dir_dict.items():
@@ -297,12 +312,13 @@ class MyMatplotlibFigure(FigureCanvas):
                     if file.split(".")[-1] != "txt":
                         continue
                     file_path = root + "/" + file
-                    signal = read_file_data(file_path, num_sig=5)
+                    signal = read_file_data(file_path)
                     # signal_class = root.split("\\")[1]
                     if class_name not in self.data_dict:
                         self.data_dict[class_name] = []
                     self.data_dict[class_name].append(signal)
                     print(file_path, "---->", root, signal.shape)
+                    self.signal_num = signal.shape[1]
         print("end")
 
 
@@ -355,11 +371,11 @@ class MyMatplotlibFigure(FigureCanvas):
             feature_data_list = []
             for feature_name in feature_list:
                 if feature_name=="Response":
-                    feature_data_list.append(all_data_temp[:,:10])
+                    feature_data_list.append(all_data_temp[:,:2 * self.signal_num])
                 if feature_name=="Sum":
-                    feature_data_list.append(all_data_temp[:, 10: 15])
+                    feature_data_list.append(all_data_temp[:, 2 * self.signal_num: 3 * self.signal_num])
                 if feature_name == "Time":
-                    feature_data_list.append(all_data_temp[:,15:])
+                    feature_data_list.append(all_data_temp[:,3 * self.signal_num:])
             feature_data_list = np.concatenate(feature_data_list, axis=1)
             return feature_data_list
 

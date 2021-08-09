@@ -2,6 +2,35 @@
 import numpy as np
 from scipy import signal
 from sklearn.preprocessing import StandardScaler, MinMaxScaler
+# from filterpy.kalman import KalmanFilter
+
+
+# def kalmanf(signal, noise_R=66):
+#     filtered_sig = []
+#     dim_z = dim_x = signal.shape[1]
+#     f = KalmanFilter(dim_x=dim_x, dim_z=dim_z)
+#
+#     f.x = np.array(signal[0, :])  # 初始值
+#     f.F = np.eye(dim_x)  # 状态转移
+#     f.H = np.eye(dim_x) * 1  # 测量矩阵
+#     f.P = np.eye(dim_x) * 1  # 协方差
+#     f.R = np.eye(dim_x) * noise_R  # 测量误差
+#     for i in signal:
+#         f.update(i)
+#         f.predict()
+#         filtered_sig.append(f.x)
+#     print(len(filtered_sig))
+#     return np.array(filtered_sig)
+
+def transpose_sig(signal):
+    trans_sig = []
+    for single_signal in signal:
+        mean_sig = np.mean(single_signal)
+        big_num = single_signal[single_signal.shape[0]//2]
+        if big_num<mean_sig:
+            single_signal = 2 * np.mean(single_signal) - single_signal
+        trans_sig.append(single_signal)
+    return np.array(trans_sig)
 
 
 def get_base(signal):
