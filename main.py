@@ -354,8 +354,8 @@ class MyMatplotlibFigure(FigureCanvas):
             print(name, len(data_list))
             scalar_data[name] = [get_all_feature(single_data) for single_data in data_list]
 
-        all_data_temp = np.array(list(scalar_data.values()))
-        all_data_temp = all_data_temp.reshape([-1, all_data_temp.shape[-1]])
+        all_data_temp = list(scalar_data.values())
+        all_data_temp = np.concatenate(all_data_temp,axis=0)
         scaler = StandardScaler()
         all_data_temp = scaler.fit_transform(all_data_temp)
 
