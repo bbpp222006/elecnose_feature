@@ -274,6 +274,8 @@ class MyMatplotlibFigure(FigureCanvas):
         self.colors = plt.rcParams["axes.prop_cycle"].by_key()["color"]
         plt.rcParams['font.sans-serif'] = ['SimHei']  # 用来正常显示中文标签
         plt.rcParams['axes.unicode_minus'] = False  # 用来正常显示负号
+
+
         self.signal_num = 0
 
     def load_data(self,class_dir_dict):
@@ -403,7 +405,18 @@ class MyMatplotlibFigure(FigureCanvas):
 
         self.axes.legend()
 
-        self.axes.set_title("、".join(feature_list))
+        self.axes.set_title(",".join(feature_list),{'family': 'Times New Roman',
+         'weight': 'bold',
+		 'style':'normal',
+         'size': 15,
+         })
+
+        labels = self.axes.get_xticklabels() + self.axes.get_yticklabels()
+        [label.set_fontname('Times New Roman') for label in labels]
+        [label.set_fontweight('bold') for label in labels]
+        [label.set_fontsize('15') for label in labels]
+        #
+        # self.axes.set_yticks(fontproperties='Times New Roman', size=14, weight='bold')
         # self.axes.plot(np.random.randint(0, 10, [5, 1]), 'o--')
         # self.axes.spines['top'].set_visible(False)  # 顶边界不可见
         # self.axes.spines['right'].set_visible(False)  # 右边界不可见
