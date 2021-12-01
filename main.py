@@ -271,11 +271,10 @@ class MyMatplotlibFigure(FigureCanvas):
         super(MyMatplotlibFigure, self).__init__(self.figs)  # 在父类种激活self.fig，
         self.axes = self.figs.add_subplot(111)  # 添加绘图区
         self.data_dict={}
-        self.colors = plt.rcParams["axes.prop_cycle"].by_key()["color"]
+        # self.colors = plt.rcParams["axes.prop_cycle"].by_key()["color"]
+        self.colors = list(plt.cm.tab10(np.arange(10)))
         plt.rcParams['font.sans-serif'] = ['SimHei']  # 用来正常显示中文标签
         plt.rcParams['axes.unicode_minus'] = False  # 用来正常显示负号
-
-
         self.signal_num = 0
 
     def load_data(self,class_dir_dict):
@@ -355,9 +354,12 @@ class MyMatplotlibFigure(FigureCanvas):
         for name, data_list in data_dict_show.items():
             print(name, len(data_list))
             scalar_data[name] = [get_all_feature(single_data) for single_data in data_list]
-
-        all_data_temp = list(scalar_data.values())
-        all_data_temp = np.concatenate(all_data_temp,axis=0)
+        aaa=[]
+        for tmp in list(scalar_data.values()):
+            for tmp1 in tmp:
+                aaa.append(tmp1)
+        all_data_temp = np.array(aaa)
+        all_data_temp = all_data_temp.reshape([-1, all_data_temp.shape[-1]])
         scaler = StandardScaler()
         all_data_temp = scaler.fit_transform(all_data_temp)
 
@@ -385,38 +387,32 @@ class MyMatplotlibFigure(FigureCanvas):
         if decomp_method=="pca":
             pca = PCA(n_components=2)
             pca.fit(get_fetured_data(all_data_temp))
+            num_lables = len(scalar_data.items())
+            colors = list(plt.cm.tab10(np.arange(num_lables)))
             for i, (name, data_list) in enumerate(scalar_data.items()):
                 new_sig = pca.transform(get_fetured_data(data_list))
-                self.axes.scatter(new_sig[:, 0], new_sig[:, 1], color=self.colors[i], alpha=0.9, label=name,s=50)
+                self.axes.scatter(new_sig[:, 0], new_sig[:, 1], color=colors[i], alpha=0.9, label=name,s=50)
 
 
 
         if decomp_method=="lda":
             lda=LinearDiscriminantAnalysis()
             lda.fit(get_fetured_data(all_data_temp),all_data_lable)
+            num_lables = len(scalar_data.items())
+            colors = list(plt.cm.tab10(np.arange(num_lables)))
             for i, (name, data_list) in enumerate(scalar_data.items()):
                 new_sig = lda.transform(get_fetured_data(data_list))
                 if new_sig.shape[1] != 1:
-                    self.axes.scatter(new_sig[:, 0], new_sig[:, 1], color=self.colors[i], alpha=0.9, label=name)
+                    self.axes.scatter(new_sig[:, 0], new_sig[:, 1], color=colors[i], alpha=0.9, label=name)
                 else:  # 二分类时没办法……
-                    self.axes.scatter(new_sig[:, 0], np.random.random([new_sig.shape[0], 1]), color=self.colors[i], alpha=0.9,
+                    self.axes.scatter(new_sig[:, 0], np.random.random([new_sig.shape[0], 1]), color=colors[i], alpha=0.9,
                                label=name)
+
 
 
         self.axes.legend()
 
-        self.axes.set_title(",".join(feature_list),{'family': 'Times New Roman',
-         'weight': 'bold',
-		 'style':'normal',
-         'size': 15,
-         })
-
-        labels = self.axes.get_xticklabels() + self.axes.get_yticklabels()
-        [label.set_fontname('Times New Roman') for label in labels]
-        [label.set_fontweight('bold') for label in labels]
-        [label.set_fontsize('15') for label in labels]
-        #
-        # self.axes.set_yticks(fontproperties='Times New Roman', size=14, weight='bold')
+        self.axes.set_title("、".join(feature_list))
         # self.axes.plot(np.random.randint(0, 10, [5, 1]), 'o--')
         # self.axes.spines['top'].set_visible(False)  # 顶边界不可见
         # self.axes.spines['right'].set_visible(False)  # 右边界不可见

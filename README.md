@@ -25,7 +25,7 @@ python3
 接下来是操作流程 按下win+r，输入cmd打开命令行窗口
 复制粘贴以下内容,回车
 
-`pip install matplotlib==3.3.4 scikit-learn==0.24.2 scipy==1.6.2 pyqt5 -i https://pypi.tuna.tsinghua.edu.cn/simple`
+`pip install matplotlib scikit-learn pandas scipy pyqt5 -i https://pypi.tuna.tsinghua.edu.cn/simple`
 
 ## 更新计划
 - [ ] 通道个数选择功能

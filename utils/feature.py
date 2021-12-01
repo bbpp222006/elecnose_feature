@@ -77,19 +77,19 @@ def get_feature(signal, num_sig):
 
 
 def get_start_end_time(test_data):
-    b, a = signal.butter(8, 0.02, 'lowpass')  # signal butter
+    b, a = signal.butter(8, 0.02, 'lowpass')  # 配置滤波器 8 表示滤波器的阶数
     temp_sig = []
-    for i in range(test_data.shape[1]):  # filter
+    for i in range(test_data.shape[1]):  # 滤波
         temp_sig.append(signal.filtfilt(b, a, test_data[:, i]))
     filterd_data = np.einsum('ij->ji', np.array(temp_sig))
 
     scaler = StandardScaler()
     test_data = scaler.fit_transform(test_data)
-    filterd_data = scaler.fit_transform(filterd_data)
+    filterd_data = scaler.fit_transform(filterd_data)  # 归一化，方便绘图
 
-    diff = filterd_data[:-1, :] - filterd_data[1:, :]
-    start_index = np.linalg.norm(diff[:diff.shape[0] // 2, :], axis=1).argsort()[::-1][0] - 50
-    end_index = diff.shape[0] // 2 + np.linalg.norm(diff[diff.shape[0] // 2:, :], axis=1).argsort()[::-1][0] - 50
+    diff = filterd_data[:-1, :] - filterd_data[1:, :]  # 一阶差分
+    start_index = np.linalg.norm(diff[diff.shape[0] // 5:diff.shape[0] // 2, :], axis=1).argsort()[::-1][0]+diff.shape[0] // 5
+    end_index = diff.shape[0] // 2 + np.linalg.norm(diff[diff.shape[0] // 2:diff.shape[0]*4 // 5, :], axis=1).argsort()[::-1][0]
     return start_index, end_index
 
 
@@ -114,10 +114,10 @@ def get_high_index(test_data_raw, top_k=20):
 
 
 def get_sensitive(test_data_raw):
-    base_index = get_base_index(test_data_raw)  # base
+    base_index = get_base_index(test_data_raw)  # 基线
     sig_base = np.mean(test_data_raw[base_index], axis=0)
 
-    high_idx = get_high_index(test_data_raw)  # sig
+    high_idx = get_high_index(test_data_raw)  # 响应
     sig_high = np.mean(test_data_raw[high_idx], axis=0)
 
     return sig_high / sig_base
@@ -137,10 +137,10 @@ def get_sig_high_90_idx(test_data):
 def get_sig_base_90_idx(test_data):
     start_index, end_index = get_start_end_time(test_data)
 
-    base_idxs = get_base_index(test_data)  # base
+    base_idxs = get_base_index(test_data)  # 找基线
     sig_base = np.mean(test_data[base_idxs], axis=0)
 
-    high_idxs = get_high_index(test_data)  # sig
+    high_idxs = get_high_index(test_data)  # 找响应
     sig_high = np.mean(test_data[high_idxs], axis=0)
 
     target_sig = sig_base + 0.1 * (sig_high - sig_base)
