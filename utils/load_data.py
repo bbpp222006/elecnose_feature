@@ -1,8 +1,9 @@
 import os
 import numpy as np
-from feature import *
+from .feature import *
 import re
 import pandas as pd
+
 
 
 # 这里只做简单的数据预处理，若需求变更复杂，需另外单独进行处理后再保存

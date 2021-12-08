@@ -400,6 +400,7 @@ class MyMatplotlibFigure(FigureCanvas):
             lda.fit(get_fetured_data(all_data_temp),all_data_lable)
             num_lables = len(scalar_data.items())
             colors = list(plt.cm.tab10(np.arange(num_lables)))
+            
             for i, (name, data_list) in enumerate(scalar_data.items()):
                 new_sig = lda.transform(get_fetured_data(data_list))
                 if new_sig.shape[1] != 1:
