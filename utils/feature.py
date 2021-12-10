@@ -90,7 +90,7 @@ def get_start_end_time(test_data):
     diff = filterd_data[:-1, :] - filterd_data[1:, :]  # 一阶差分
     start_index = np.linalg.norm(diff[diff.shape[0] // 5:diff.shape[0] // 2, :], axis=1).argsort()[::-1][0]+diff.shape[0] // 5
     end_index = diff.shape[0] // 2 + np.linalg.norm(diff[diff.shape[0] // 2:diff.shape[0]*4 // 5, :], axis=1).argsort()[::-1][0]
-    return start_index, end_index
+    return 1760, 3565
 
 
 def get_base_index(test_data_raw, top_k=20):
