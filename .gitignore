@@ -1,2 +1,4 @@
 /data1/
 /.idea/
+
+/utils/__pycache__/
