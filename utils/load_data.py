@@ -26,7 +26,7 @@ def read_file_data(file_path): #至少20个以上的采样点！
         count_list[zero_index] += 1
     timearray_index = np.argwhere(count_list>=9)
     data = np.delete(data, timearray_index, axis=1)
-    print('自动检测出时间序列，已删除', end=",")
+    print('自动检测出时间序列，已处理', end=",")
     nan_flag = data.sum()
     assert np.isnan(nan_flag) == False
     data = transpose_sig(data)
