@@ -56,7 +56,7 @@ def get_all_score(feature_dict):
     a = log_loss(y_true=y_test,y_pred=y_score)
     return a,data_score_dict
 
-path = "data1/3、不同湿度下甲醛和乙醇"
+path = "data"
 
 data_dict = utils.load_data.read_data(path)
 
@@ -68,3 +68,5 @@ for sig2test in range(sig_num):
     a,data_score_dict = get_all_score(feature_dict)
     
     print("删除第",sig2test,"个传感器的交叉熵：",a)
+
+input()
