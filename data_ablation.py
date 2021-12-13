@@ -6,20 +6,22 @@ import utils.load_data
 from sklearn.preprocessing import StandardScaler
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
 import utils.feature 
-from sklearn.metrics import log_loss
+from sklearn.metrics import log_loss,classification_report
 from tqdm import tqdm
 
-def change2feature(data_dict,sig_index):
+def change2feature(data_dict,sig_index=None):
     """
     data_dict:正常的数据
     sig_index:要删除的信号列
     """
-    assert sig_index<list(data_dict.values())[0][0].shape[1]
+    if sig_index!= None:
+        assert sig_index<list(data_dict.values())[0][0].shape[1]
     data_feature_dict = {}
     for i in tqdm(data_dict.items()):
         featured_data_list = []
         for j in i[1]:
-            j = np.delete(j,sig_index,axis=1)
+            if sig_index!= None:
+                j = np.delete(j,sig_index,axis=1)
             feature_data = utils.feature.get_all_feature(j)
             featured_data_list.append(feature_data)
         data_feature_dict[i[0]]=featured_data_list
@@ -56,17 +58,18 @@ def get_all_score(feature_dict):
     a = log_loss(y_true=y_test,y_pred=y_score)
     return a,data_score_dict
 
-path = "data"
+path = "data1/2、不同浓度下甲醛和乙醇"
 
 data_dict = utils.load_data.read_data(path)
 
 class_num = len(list(data_dict.keys()))
 sig_num = list(data_dict.values())[0][0].shape[1]
+
+feature_dict = change2feature(data_dict)
+a,data_score_dict = get_all_score(feature_dict)
+print("完整传感器阵列的交叉熵：",a)
 for sig2test in range(sig_num):
     feature_dict = change2feature(data_dict,sig2test)
-
     a,data_score_dict = get_all_score(feature_dict)
-    
     print("删除第",sig2test,"个传感器的交叉熵：",a)
-
 input()

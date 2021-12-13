@@ -1,5 +1,7 @@
 ## 软件说明
-码云仓库：https://gitee.com/glider123/elecnose_feature
+本脚本唯一更新地址：https://github.com/bbpp222006/elecnose_feature
+
+*注意：*如果你从其他地方获得了这份文件的拷贝，请前往github项目地址下获取原版。
 
 ![](.README_images/97217005.png)
 程序可选pca和lda两种降维方式显示
