@@ -10,10 +10,6 @@ from sklearn.metrics import log_loss,classification_report
 from tqdm import tqdm
 
 def change2feature(data_dict,sig_index=None):
-    """
-    data_dict:正常的数据
-    sig_index:要删除的信号列
-    """
     if sig_index!= None:
         assert sig_index<list(data_dict.values())[0][0].shape[1]
     data_feature_dict = {}
