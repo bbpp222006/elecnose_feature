@@ -23,6 +23,20 @@ def change2feature(data_dict,sig_index=None):
         data_feature_dict[i[0]]=featured_data_list
     return data_feature_dict
 
+def get_fetured_data(all_data_temp):
+            feature_data_list = []
+
+            if feature_name[0]=="1":
+                feature_data_list.append(all_data_temp[:,:2 * sig_num])
+            if feature_name[1]=="1":
+                feature_data_list.append(all_data_temp[:, 2 * sig_num: 3 * sig_num])
+            if feature_name [2]=="1":
+                feature_data_list.append(all_data_temp[:,3 * sig_num:])
+                
+            feature_data_list = np.concatenate(feature_data_list, axis=1)
+            return feature_data_list
+        
+        
 def get_score(all_data,all_labels,test_data):
     scaler = StandardScaler()
     all_data = scaler.fit_transform(all_data)
@@ -37,6 +51,7 @@ def get_all_score(feature_dict):
     data_score_dict = {}
     predict_score = [0,0]
     all_feature = np.concatenate(list(feature_dict.values()),axis=0)
+    all_feature = get_fetured_data(all_feature)
     all_labels = reduce(lambda x, y: x+y, [[key]*len(value) for key,value in feature_dict.items()])
     for data_index,label in enumerate(all_labels):
         test_data = all_feature[data_index,:]
@@ -64,6 +79,7 @@ path = "data"
 
 data_dict = utils.load_data.read_data(path)
 
+feature_name = input("输入想使用的特征（111表示Response Sum Time都要，011表示只要Sum Time，默认回车111）：") or "111"
 class_num = len(list(data_dict.keys()))
 sig_num = list(data_dict.values())[0][0].shape[1]
 
