@@ -25,7 +25,7 @@ from sklearn.preprocessing import StandardScaler, MinMaxScaler
 def transpose_sig(signal):
     trans_sig = []
     for single_signal in signal:
-        mean_sig = np.mean(single_signal)
+        mean_sig = single_signal[0]
         big_num = single_signal[single_signal.shape[0]//2]
         if big_num<mean_sig:
             single_signal = 2 * np.mean(single_signal) - single_signal
