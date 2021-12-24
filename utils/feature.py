@@ -168,7 +168,7 @@ def Feature_time(signal):
     start_index, end_index = get_start_end_time(signal)
     high_90_idx = get_sig_high_90_idx(signal)
     base_90_idx = get_sig_base_90_idx(signal)
-    return np.array([(high_90_idx - start_index)*np.random.randn(), (base_90_idx - end_index)*np.random.randn()])
+    return np.array([high_90_idx - start_index, base_90_idx - end_index])
 
 def get_all_feature(test_data):
     feature_sum = Feature_sum(test_data)

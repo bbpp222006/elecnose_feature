@@ -75,7 +75,7 @@ def get_all_score(feature_dict):
     predict_score = predict_score[1]/(predict_score[0]+predict_score[1])*100
     return a,predict_score
 
-path = "data1/2、不同浓度下甲醛和乙醇"
+path = "data1/1、甲醛和乙醇"
 
 data_dict = utils.load_data.read_data(path)
 
