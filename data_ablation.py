@@ -30,13 +30,13 @@ def get_fetured_data(all_data_temp):
                 feature_data_list.append(all_data_temp[:,:2 * sig_num])
             if feature_name[1]=="1":
                 feature_data_list.append(all_data_temp[:, 2 * sig_num: 3 * sig_num])
-            if feature_name [2]=="1":
+            if feature_name[2]=="1":
                 feature_data_list.append(all_data_temp[:,3 * sig_num:])
-                
             feature_data_list = np.concatenate(feature_data_list, axis=1)
             return feature_data_list
-        
-        
+
+
+
 def get_score(all_data,all_labels,test_data):
     scaler = StandardScaler()
     all_data = scaler.fit_transform(all_data)
@@ -75,7 +75,7 @@ def get_all_score(feature_dict):
     predict_score = predict_score[1]/(predict_score[0]+predict_score[1])*100
     return a,predict_score
 
-path = "data"
+path = "data1/2、不同浓度下甲醛和乙醇"
 
 data_dict = utils.load_data.read_data(path)
 

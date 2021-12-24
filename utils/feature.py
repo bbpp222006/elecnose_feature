@@ -25,7 +25,7 @@ from sklearn.preprocessing import StandardScaler, MinMaxScaler
 def transpose_sig(signal):
     trans_sig = []
     for single_signal in signal:
-        mean_sig = single_signal[0]
+        mean_sig = single_signal[-1]
         big_num = single_signal[single_signal.shape[0]//2]
         if big_num<mean_sig:
             single_signal = 2 * np.mean(single_signal) - single_signal
@@ -88,9 +88,9 @@ def get_start_end_time(test_data):
     filterd_data = scaler.fit_transform(filterd_data)  # 归一化，方便绘图
 
     diff = filterd_data[:-1, :] - filterd_data[1:, :]  # 一阶差分
-    start_index = np.linalg.norm(diff[diff.shape[0] // 5:diff.shape[0] // 2, :], axis=1).argsort()[::-1][0]+diff.shape[0] // 5
+    start_index = np.linalg.norm(diff[diff.shape[0] // 5:diff.shape[0] // 2, :], axis=1).argsort()[::-1][0]+diff.shape[0] // 5 
     end_index = diff.shape[0] // 2 + np.linalg.norm(diff[diff.shape[0] // 2:diff.shape[0]*4 // 5, :], axis=1).argsort()[::-1][0]
-    return 1760, 3565
+    return start_index , end_index
 
 
 def get_base_index(test_data_raw, top_k=20):

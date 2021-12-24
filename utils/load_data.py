@@ -29,7 +29,7 @@ def read_file_data(file_path): #至少20个以上的采样点！
     print('自动检测出时间序列，已处理', end=",")
     nan_flag = data.sum()
     assert np.isnan(nan_flag) == False
-    data = transpose_sig(data)
+    # data = transpose_sig(data)
     # assert data.shape[1] == num_sig
     return data
 
